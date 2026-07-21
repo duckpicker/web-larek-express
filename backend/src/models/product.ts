@@ -17,8 +17,14 @@ const productSchema = new Schema<IProduct>({
     maxlength: [30, 'Максимальная длина поля "title" - 30'],
   },
   image: {
-    type: { fileName: String, originalName: String },
-    required: [true, 'Поле "image" должно быть заполнено'],
+    fileName: {
+      type: String,
+      required: [true, 'Поле "image.fileName" должно быть заполнено'],
+    },
+    originalName: {
+      type: String,
+      required: [true, 'Поле "image.originalName" должно быть заполнено'],
+    },
   },
   category: {
     type: String,

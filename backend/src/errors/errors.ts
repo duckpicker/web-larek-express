@@ -1,27 +1,13 @@
-// eslint-disable-next-line max-classes-per-file
-export class BadRequestError extends Error {
-  statusCode = 400;
+import HttpStatus from '../types/http-status';
 
-  // eslint-disable-next-line no-useless-constructor
-  constructor(message: string) {
-    super(message);
-  }
+export class BadRequestError extends Error {
+  statusCode = HttpStatus.BAD_REQUEST;
 }
 
 export class NotFoundError extends Error {
-  statusCode = 404;
-
-  // eslint-disable-next-line no-useless-constructor
-  constructor(message: string) {
-    super(message);
-  }
+  statusCode = HttpStatus.NOT_FOUND;
 }
 
 export class ConflictError extends Error {
-  statusCode = 409;
-
-  // eslint-disable-next-line no-useless-constructor
-  constructor(message: string) {
-    super(message);
-  }
+  statusCode = HttpStatus.CONFLICT;
 }

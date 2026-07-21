@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Product from '../models/product';
 import { BadRequestError, ConflictError } from '../errors/errors';
+import HttpStatus from '../types/http-status';
 
 export const getProducts = async (
   _req: Request,
@@ -38,7 +39,7 @@ export const createProduct = async (
     });
 
     await product.save();
-    res.status(201).json(product);
+    res.status(HttpStatus.CREATED).json(product);
   } catch (err) {
     if (err instanceof Error && err.message.includes('E11000')) {
       next(new ConflictError('Товар с таким title уже существует'));

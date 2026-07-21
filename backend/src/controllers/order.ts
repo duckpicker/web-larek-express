@@ -19,13 +19,14 @@ const createOrder = async (
       return;
     }
 
-    const calculatedTotal = products.reduce((sum, product) => {
-      if (product.price === null) {
-        next(new BadRequestError(`Product "${product.title}" is not for sale`));
-        return sum;
-      }
-      return sum + product.price;
-    }, 0);
+    const allProductsAreForSale = products.every((product) => product.price !== null);
+
+    if (!allProductsAreForSale) {
+      next(new BadRequestError('Some products are not for sale'));
+      return;
+    }
+
+    const calculatedTotal = products.reduce((sum, product) => sum + (product.price as number), 0);
 
     if (calculatedTotal !== total) {
       next(new BadRequestError('Total amount does not match'));
