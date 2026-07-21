@@ -1,0 +1,47 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import path from 'path';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { errors } from 'celebrate';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import dotenv from 'dotenv';
+import Logger from '../utils/logger';
+import { requestLogger, errorLogger } from './middlewares/logger';
+import mainRouter from './routes/index';
+import { celebrateErrorHandler, errorHandler } from './middlewares/error';
+
+const app = express();
+
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
+const DB_ADDRESS = process.env.DB_ADDRESS || 'mongodb://127.0.0.1:27017/weblarek';
+
+const logger = new Logger(app.name);
+
+app.use(cors({ origin: process.env.ORIGIN_ALLOW }));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(requestLogger);
+
+app.use('/', mainRouter);
+
+app.use(errorLogger);
+
+app.use(errors());
+app.use(celebrateErrorHandler);
+app.use(errorHandler);
+
+mongoose.connect(DB_ADDRESS)
+  .then(() => {
+    logger.log('database connected successfully');
+    app.listen(PORT, () => {
+      logger.log(`server is running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    logger.log(`database connection error: ${err}`);
+    process.exit(1);
+  });
