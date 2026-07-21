@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 import Logger from '../utils/logger';
 import { requestLogger, errorLogger } from './middlewares/logger';
 import mainRouter from './routes/index';
-import errorHandler, { celebrateErrorHandler } from './middlewares/error';
+import { celebrateErrorHandler, errorHandler } from './middlewares/error';
 
 const app = express();
 
